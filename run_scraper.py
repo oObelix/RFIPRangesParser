@@ -18,7 +18,7 @@ def print_console(
     for i, line in enumerate(zip(_begin_ip_address,
                                  _end_ip_address,
                                  _total_count)):
-        print(f"{i}\t| {line[0]}\t| {line[1]}\t| {line[2]}\t")
+        print(f"{i+1}\t| {line[0]}\t| {line[1]}\t| {line[2]}\t")
 
 
 def add_to_db(
