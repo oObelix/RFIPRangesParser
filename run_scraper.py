@@ -1,6 +1,7 @@
 import requests
 from lxml import html
 import argparse
+from db_init import update_collected_data
 
 url_parse: str = "https://lite.ip2location.com/russian-federation-ip-address-ranges"
 xpath_begin_ip_address: str = ".//table[@id='ip-address']/tbody/tr/td[2]/text()"
@@ -26,6 +27,7 @@ def add_to_db(
         _total_count: list
 ):
     print('Added to Db')
+    update_collected_data(zip(_begin_ip_address, _end_ip_address, _total_count))
 
 
 request = requests.get(url_parse)
@@ -43,4 +45,4 @@ namespace = args.parse_args()
 if namespace.dry_run == 'True':
     print_console(begin_ip_address, end_ip_address, total_count)
 else:
-    add_to_db([], [], [])
+    add_to_db(begin_ip_address, end_ip_address, total_count)
