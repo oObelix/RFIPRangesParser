@@ -1,4 +1,4 @@
-from typing import List, Set, Dict, Tuple, Optional, Any
+from typing import List, Tuple, Any
 import requests
 from lxml import html
 import argparse
@@ -37,4 +37,5 @@ if __name__ == "__main__":
     if namespace.dry_run == 'True':
         print_console(begin_ip_address, end_ip_address, total_count)
     else:
-        update_collected_data(zip(begin_ip_address, end_ip_address, total_count))
+        update_collected_data(zip(begin_ip_address, end_ip_address,
+                                  total_count))
