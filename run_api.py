@@ -1,7 +1,9 @@
+from typing import List, Tuple, Any
 import uuid
 from typing import Optional, Awaitable
 from tornado.options import define, options
 import tornado.web
+import tornado.ioloop
 from db_init import get_collected_data
 
 define("port", default=8888, type=int)
@@ -9,12 +11,11 @@ define("port", default=8888, type=int)
 
 class Application(tornado.web.Application):
     def __init__(self):
-        handlers = [
-            # ("/", MainHandler),
+        handlers: List[Tuple[str, Any]] = [
             ("/api/login", ApiLoginHandler),
             ("/api/data", ApiDataHandler),
         ]
-        settings = dict(
+        settings: dict = dict(
             xsrf_cookies=True,
             cookie_secret=uuid.uuid4().int,
             debug=True,
@@ -22,15 +23,10 @@ class Application(tornado.web.Application):
         super(Application, self).__init__(handlers, **settings)
 
 
-# class MainHandler(tornado.web.RequestHandler):
-#     def data_received(self, chunk: bytes) -> Optional[Awaitable[None]]:
-#         pass
-#
-#     def get(self):
-#         self.write('Main Handler')
-
-
 class ApiLoginHandler(tornado.web.RequestHandler):
+    """
+    Login Handler
+    """
     def data_received(self, chunk: bytes) -> Optional[Awaitable[None]]:
         pass
 
@@ -42,6 +38,9 @@ class ApiLoginHandler(tornado.web.RequestHandler):
 
 
 class ApiDataHandler(tornado.web.RequestHandler):
+    """
+    Api Data Handler
+    """
     def data_received(self, chunk: bytes) -> Optional[Awaitable[None]]:
         pass
 
@@ -49,7 +48,7 @@ class ApiDataHandler(tornado.web.RequestHandler):
         self.set_header("Content-Type", "application/json")
 
     def get(self):
-        data: list = get_collected_data()
+        data: List[Any] = get_collected_data()
         total: int = len(data)
         result = {
             "data": [{"id": item.id,
@@ -63,6 +62,6 @@ class ApiDataHandler(tornado.web.RequestHandler):
 
 
 if __name__ == "__main__":
-    app = Application()
+    app: Any = Application()
     app.listen(options.port)
     tornado.ioloop.IOLoop.current().start()
