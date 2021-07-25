@@ -1,41 +1,53 @@
+from typing import List, Tuple, Any
 from sqlalchemy import create_engine, Column, Integer, String, DateTime
 from datetime import datetime
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
 
-
 # TODO: add db data from config
-engine = create_engine(
+engine: Any = create_engine(
     "postgresql+psycopg2://rfipapp:tmppass@localhost/rfipapp")
 
-Base = declarative_base()
+Base: Any = declarative_base()
 
 
 class CollectedData(Base):
+    """
+    collected_data table init
+    """
     __tablename__ = 'collected_data'
-    id = Column(Integer, primary_key=True, nullable=False)
-    begin_ip_address = Column(String(15))
-    end_ip_address = Column(String(15))
-    total_count = Column(String(15))
+
+    id: int = Column(Integer, primary_key=True, nullable=False)
+    begin_ip_address: str = Column(String(15))
+    end_ip_address: str = Column(String(15))
+    total_count: str = Column(String(15))
 
 
 class Users(Base):
+    """
+    users table init
+    """
     __tablename__ = 'users'
-    id = Column(Integer, primary_key=True, nullable=False)
-    login = Column(String(50), unique=True, nullable=False)
-    password = Column(String(50), nullable=False)
-    created_at = Column(DateTime(), default=datetime.utcnow, nullable=False)
-    last_request = Column(DateTime())
+
+    id: int = Column(Integer, primary_key=True, nullable=False)
+    login: str = Column(String(50), unique=True, nullable=False)
+    password: str = Column(String(50), nullable=False)
+    created_at: DateTime = Column(DateTime(), default=datetime.utcnow,
+                                  nullable=False)
+    last_request: DateTime = Column(DateTime())
 
 
-Base.metadata.create_all(engine)
+def get_collected_data() -> List[CollectedData]:
+    """
+    Get all records in get_collected table and return as list of instances
+    of CollectedData
+    :return: List[CollectedData]
+    """
+    return session.query(CollectedData).all()
 
 
 def update_collected_data(data):
     CollectedData.__table__.drop(engine)
     Base.metadata.create_all(engine, tables=[CollectedData.__table__])
-
-    Session = sessionmaker(bind=engine)
-    session = Session()
 
     session.bulk_insert_mappings(
         CollectedData,
@@ -48,7 +60,8 @@ def update_collected_data(data):
     session.commit()
 
 
-def get_collected_data() -> list:
+if __name__ == "__main__":
+    Base.metadata.create_all(engine)
+
     Session = sessionmaker(bind=engine)
     session = Session()
-    return session.query(CollectedData).all()
