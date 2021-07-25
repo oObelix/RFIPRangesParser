@@ -1,11 +1,13 @@
 from typing import List, Tuple, Any, Iterator
+from config import Config
 from sqlalchemy import create_engine, Column, Integer, String, DateTime
 from datetime import datetime
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
 
-# TODO: add db data from config
+config = Config()
 engine: Any = create_engine(
-    "postgresql+psycopg2://rfipapp:tmppass@localhost/rfipapp")
+    f"postgresql+psycopg2://{config.db_user}:{config.db_pass}@localhost"
+    f"/{config.db_name}")
 
 Base: Any = declarative_base()
 

@@ -1,14 +1,15 @@
 from typing import List, Tuple, Any
 import uuid
 from typing import Optional, Awaitable
+from config import Config
 from tornado.options import define, options
 import tornado.web
 import tornado.ioloop
 from db_init import get_collected_data
 
 
-# TODO: get port variable from config.yaml
-define("port", default=8888, type=int)
+config = Config()
+define("port", default=config.server_port, type=int)
 
 
 class Application(tornado.web.Application):
