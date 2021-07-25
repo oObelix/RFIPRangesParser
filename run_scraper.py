@@ -1,4 +1,4 @@
-from typing import List, Set, Dict, Tuple, Optional
+from typing import List, Set, Dict, Tuple, Optional, Any
 import requests
 from lxml import html
 import argparse
@@ -20,18 +20,19 @@ def print_console(*lists: List[Tuple]) -> None:
         print("\t".join(line))
 
 
-request = requests.get(URL_PARSE)
+request: Any = requests.get(URL_PARSE)
 html_parse: str = request.text
 
-parse_tree = html.fromstring(html_parse)
+parse_tree: Any = html.fromstring(html_parse)
 
-begin_ip_address: list = parse_tree.xpath(XPATH_BEGIN_IP_ADDRESS)
-end_ip_address: list = parse_tree.xpath(XPATH_END_IP_ADDRESS)
-total_count: list = parse_tree.xpath(XPATH_TOTAL_COUNT)
+begin_ip_address: List = parse_tree.xpath(XPATH_BEGIN_IP_ADDRESS)
+end_ip_address: List = parse_tree.xpath(XPATH_END_IP_ADDRESS)
+total_count: List = parse_tree.xpath(XPATH_TOTAL_COUNT)
 
-args = argparse.ArgumentParser()
+args: Any = argparse.ArgumentParser()
 args.add_argument('--dry_run')
-namespace = args.parse_args()
+namespace: Any = args.parse_args()
+
 if namespace.dry_run == 'True':
     print_console(begin_ip_address, end_ip_address, total_count)
 else:
