@@ -37,5 +37,4 @@ if __name__ == "__main__":
     if namespace.dry_run == 'True':
         print_console(begin_ip_address, end_ip_address, total_count)
     else:
-        update_collected_data(zip(begin_ip_address, end_ip_address,
-                                  total_count))
+        update_collected_data(begin_ip_address, end_ip_address, total_count)

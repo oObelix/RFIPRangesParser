@@ -1,4 +1,4 @@
-from typing import List, Tuple, Any
+from typing import List, Tuple, Any, Iterator
 from sqlalchemy import create_engine, Column, Integer, String, DateTime
 from datetime import datetime
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
@@ -45,10 +45,21 @@ def get_collected_data() -> List[CollectedData]:
     return session.query(CollectedData).all()
 
 
-def update_collected_data(data):
+def update_collected_data(begin_ip_address: List[str],
+                          end_ip_address: List[str],
+                          total_count: List[str]) -> None:
+    """
+    Replace all data of update_collected with new data
+    :param begin_ip_address: List[str]
+    :param end_ip_address: List[str]
+    :param total_count: List[str]
+    :return: None
+    """
     CollectedData.__table__.drop(engine)
     Base.metadata.create_all(engine, tables=[CollectedData.__table__])
 
+    data: Iterator[Tuple[str, str, str]] =\
+        zip(begin_ip_address, end_ip_address, total_count)
     session.bulk_insert_mappings(
         CollectedData,
         [dict(
