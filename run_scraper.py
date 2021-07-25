@@ -20,20 +20,21 @@ def print_console(*lists: List[Tuple]) -> None:
         print("\t".join(line))
 
 
-request: Any = requests.get(URL_PARSE)
-html_parse: str = request.text
+if __name__ == "__main__":
+    request: Any = requests.get(URL_PARSE)
+    html_parse: str = request.text
 
-parse_tree: Any = html.fromstring(html_parse)
+    parse_tree: Any = html.fromstring(html_parse)
 
-begin_ip_address: List = parse_tree.xpath(XPATH_BEGIN_IP_ADDRESS)
-end_ip_address: List = parse_tree.xpath(XPATH_END_IP_ADDRESS)
-total_count: List = parse_tree.xpath(XPATH_TOTAL_COUNT)
+    begin_ip_address: List = parse_tree.xpath(XPATH_BEGIN_IP_ADDRESS)
+    end_ip_address: List = parse_tree.xpath(XPATH_END_IP_ADDRESS)
+    total_count: List = parse_tree.xpath(XPATH_TOTAL_COUNT)
 
-args: Any = argparse.ArgumentParser()
-args.add_argument('--dry_run')
-namespace: Any = args.parse_args()
+    args: Any = argparse.ArgumentParser()
+    args.add_argument('--dry_run')
+    namespace: Any = args.parse_args()
 
-if namespace.dry_run == 'True':
-    print_console(begin_ip_address, end_ip_address, total_count)
-else:
-    update_collected_data(zip(begin_ip_address, end_ip_address, total_count))
+    if namespace.dry_run == 'True':
+        print_console(begin_ip_address, end_ip_address, total_count)
+    else:
+        update_collected_data(zip(begin_ip_address, end_ip_address, total_count))
