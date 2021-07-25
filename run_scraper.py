@@ -20,15 +20,6 @@ def print_console(*lists: List[Tuple]) -> None:
         print("\t".join(line))
 
 
-def add_to_db(
-        _begin_ip_address: list,
-        _end_ip_address: list,
-        _total_count: list
-):
-    print('Added to Db')
-    update_collected_data(zip(_begin_ip_address, _end_ip_address, _total_count))
-
-
 request = requests.get(URL_PARSE)
 html_parse: str = request.text
 
@@ -44,4 +35,4 @@ namespace = args.parse_args()
 if namespace.dry_run == 'True':
     print_console(begin_ip_address, end_ip_address, total_count)
 else:
-    add_to_db(begin_ip_address, end_ip_address, total_count)
+    update_collected_data(zip(begin_ip_address, end_ip_address, total_count))
