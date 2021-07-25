@@ -2,7 +2,7 @@ from typing import List, Tuple, Any, Iterator
 from config import Config
 from sqlalchemy import create_engine, Column, Integer, String, DateTime
 from datetime import datetime
-from sqlalchemy.orm import Session, declarative_base, sessionmaker
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 
 config = Config()
@@ -45,8 +45,7 @@ def get_collected_data() -> List[CollectedData]:
     of CollectedData
     :return: List[CollectedData]
     """
-    Session = sessionmaker(bind=engine)
-    session = Session()
+    session: Any = sessionmaker(bind=engine)()
     return session.query(CollectedData).all()
 
 
@@ -66,8 +65,7 @@ def update_collected_data(begin_ip_address: List[str],
     data: Iterator[Tuple[str, str, str]] =\
         zip(begin_ip_address, end_ip_address, total_count)
 
-    Session = sessionmaker(bind=engine)
-    session = Session()
+    session: Any = sessionmaker(bind=engine)()
     session.bulk_insert_mappings(
         CollectedData,
         [dict(
