@@ -6,6 +6,8 @@ import tornado.web
 import tornado.ioloop
 from db_init import get_collected_data
 
+
+# TODO: get port variable from config.yaml
 define("port", default=8888, type=int)
 
 
