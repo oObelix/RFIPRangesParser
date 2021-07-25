@@ -46,3 +46,9 @@ def update_collected_data(data):
         ) for bia, eia, tc in data]
     )
     session.commit()
+
+
+def get_collected_data() -> list:
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    return session.query(CollectedData).all()
