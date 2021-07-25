@@ -4,6 +4,7 @@ from sqlalchemy import create_engine, Column, Integer, String, DateTime
 from datetime import datetime
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
 
+
 config = Config()
 engine: Any = create_engine(
     f"postgresql+psycopg2://{config.db_user}:{config.db_pass}@localhost"

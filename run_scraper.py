@@ -4,6 +4,7 @@ from lxml import html
 import argparse
 from db_init import update_collected_data
 
+
 URL_PARSE = "https://lite.ip2location.com/russian-federation-ip-address-ranges"
 XPATH_BEGIN_IP_ADDRESS = ".//table[@id='ip-address']/tbody/tr/td[2]/text()"
 XPATH_END_IP_ADDRESS = ".//table[@id='ip-address']/tbody/tr/td[4]/text()"
