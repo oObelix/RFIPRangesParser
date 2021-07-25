@@ -42,6 +42,8 @@ def get_collected_data() -> List[CollectedData]:
     of CollectedData
     :return: List[CollectedData]
     """
+    Session = sessionmaker(bind=engine)
+    session = Session()
     return session.query(CollectedData).all()
 
 
@@ -60,6 +62,9 @@ def update_collected_data(begin_ip_address: List[str],
 
     data: Iterator[Tuple[str, str, str]] =\
         zip(begin_ip_address, end_ip_address, total_count)
+
+    Session = sessionmaker(bind=engine)
+    session = Session()
     session.bulk_insert_mappings(
         CollectedData,
         [dict(
@@ -73,6 +78,3 @@ def update_collected_data(begin_ip_address: List[str],
 
 if __name__ == "__main__":
     Base.metadata.create_all(engine)
-
-    Session = sessionmaker(bind=engine)
-    session = Session()
