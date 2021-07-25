@@ -49,7 +49,17 @@ class ApiDataHandler(tornado.web.RequestHandler):
         self.set_header("Content-Type", "application/json")
 
     def get(self):
-        self.write('{"handler": "Api Data Handler"}')
+        data: list = get_collected_data()
+        total: int = len(data)
+        result = {
+            "data": [{"id": item.id,
+                      "begin_ip_address": item.begin_ip_address,
+                      "end_ip_address": item.end_ip_address,
+                      "total_count": item.total_count
+                      } for item in data],
+            "total": total
+        }
+        self.write(result)
 
 
 if __name__ == "__main__":
