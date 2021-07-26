@@ -1,6 +1,6 @@
 from typing import List, Tuple, Any, Iterator
 from sqlalchemy import Column, Integer, String, DateTime
-from datetime import datetime
+import datetime
 from db_init import erase_table, Base
 
 
@@ -57,13 +57,28 @@ class CollectedData(Base):
 
 class Users(Base):
     """
-    users table init
+    Users table init
     """
     __tablename__ = 'users'
 
     id: int = Column(Integer, primary_key=True, nullable=False)
     login: str = Column(String(50), unique=True, nullable=False)
     password: str = Column(String(50), nullable=False)
-    created_at: DateTime = Column(DateTime(), default=datetime.utcnow,
+    created_at: DateTime = Column(DateTime(),
+                                  default=datetime.datetime.utcnow(),
                                   nullable=False)
     last_request: DateTime = Column(DateTime())
+
+    @classmethod
+    def user_valid(cls, session: Any, login: str, password: str) -> bool:
+        return True
+
+    @classmethod
+    def user_by_login(cls, session: Any, login: str) -> \
+            Tuple[int, Any, Any]:
+        return 111, datetime.datetime.utcnow(), datetime.timedelta(seconds=600)
+
+    @classmethod
+    def user_by_id(cls, session: Any, user_id: int) -> \
+            Tuple[str, Any, Any]:
+        return "Login", datetime.datetime.utcnow(), datetime.timedelta(seconds=600)
