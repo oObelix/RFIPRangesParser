@@ -1,17 +1,20 @@
 ## Russian Federation IP Address Ranges Parser
 
-Parser for page: (https://lite.ip2location.com/russian-federation-ip-address-ranges)
+Parser IP ranges from page: https://lite.ip2location.com/russian-federation-ip-address-ranges
 
 ### Requirements
-- Python 3.7.5+
-- Tornado 6.0.4+
-- SQLAlchemy 1.3.20+
-- PostgreSQL 11+
+* Python 3.7.5+
+* Tornado 6.1.4+
+* SQLAlchemy 1.3.20+
+* PostgreSQL 11+
 
-### Install
-- rename `config.example.yaml` to `config.yaml` and edit it (you will need DB_HOST, DB_USER, DB_PASS, DB_NAME for your database server).
-- to install dependencies `pip install -r requirements.txt`
-- grab data `python run_scraper.py`
+### Installation
+* Copy `config.example.yaml` to `config.yaml` and modify it. You must change DB_HOST, DB_USER, DB_PASS, DB_NAME and JWT_SECRET.
+* install python dependencies: `pip install -r requirements.txt`
+* deploy database : `python db_init.py`
 
-### Run server
-- `python run_api.py`
+### Fetching data
+You must run script for fetching data for correct working API: `python run_scraper.py`
+
+### Serve API
+* `python run_api.py`
