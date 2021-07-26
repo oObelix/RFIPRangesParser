@@ -6,9 +6,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 
 
 config = Config()
-engine: Any = create_engine(
-    f"postgresql+psycopg2://{config.db_user}:{config.db_pass}@localhost"
-    f"/{config.db_name}")
+engine: Any = create_engine(config.db_server_dsn)
 
 Base: Any = declarative_base()
 

@@ -11,17 +11,8 @@ class Config:
             self.config: Dict[str] = yaml.safe_load(f)
 
     @property
-    def db_name(self) -> str:
-        return self.db_user
-
-    @property
-    def db_user(self) -> str:
-        return self.config['services']['db']['environment']['POSTGRES_USER']
-
-    @property
-    def db_pass(self) -> str:
-        return self.config['services']['db']['environment'][
-            'POSTGRES_PASSWORD']
+    def db_server_dsn(self) -> str:
+        return self.config['db_server']['DSN']
 
     @property
     def server_port(self) -> int:

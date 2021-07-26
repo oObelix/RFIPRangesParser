@@ -4,6 +4,11 @@ server:
 
   port: 8888
 
+db_server:
+
+  DSN: "postgresql+psycopg2://rfipapp:tmppass@localhost/rfipapp"
+
+
 services:
 
   db:
