@@ -5,7 +5,8 @@ from config import Config
 from tornado.options import define, options
 import tornado.web
 import tornado.ioloop
-from db_init import get_collected_data
+from db_session import session
+from models import CollectedData, Users
 
 
 config = Config()
@@ -51,7 +52,7 @@ class ApiDataHandler(tornado.web.RequestHandler):
         self.set_header("Content-Type", "application/json")
 
     def get(self):
-        data: List[Any] = get_collected_data()
+        data: List[Any] = CollectedData.get_collected_data(session)
         total: int = len(data)
         result = {
             "data": [{"id": item.id,

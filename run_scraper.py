@@ -2,7 +2,8 @@ from typing import List, Tuple, Any
 import requests
 from lxml import html
 import argparse
-from db_init import update_collected_data
+from db_session import session
+from models import CollectedData
 
 
 URL_PARSE = "https://lite.ip2location.com/russian-federation-ip-address-ranges"
@@ -38,4 +39,7 @@ if __name__ == "__main__":
     if namespace.dry_run == 'True':
         print_console(begin_ip_address, end_ip_address, total_count)
     else:
-        update_collected_data(begin_ip_address, end_ip_address, total_count)
+        CollectedData.update_collected_data(session,
+                                            begin_ip_address,
+                                            end_ip_address,
+                                            total_count)
