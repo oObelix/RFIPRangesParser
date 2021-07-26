@@ -1,7 +1,6 @@
 from typing import List, Tuple, Any, Iterator
 from sqlalchemy import Column, Integer, String, DateTime, exc
 import datetime
-from sqlalchemy.util import NoneType
 from db_init import erase_table, Base
 
 
@@ -72,14 +71,33 @@ class Users(Base):
 
     @classmethod
     def data_by_login(cls, session: Any, login: str) -> Any:
+        """
+        Users instance founded by user login
+        :param session: Any
+        :param login: str
+        :return: Any
+        """
         return session.query(cls).filter_by(login=login).first()
 
     @classmethod
     def data_by_id(cls, session: Any, user_id: int) -> Any:
+        """
+        Users instance founded by user id
+        :param session: Any
+        :param user_id: str
+        :return: Any
+        """
         return session.query(cls).get(user_id)
 
     @classmethod
     def valid(cls, session: Any, login: str, password: str) -> bool:
+        """
+        Check user exist in Users with current login and password
+        :param session: Any
+        :param login: str
+        :param password: str
+        :return: bool
+        """
         try:
             result: Users = session.query(cls).filter_by(login=login).first()
             if hasattr(result, 'password'):
@@ -91,10 +109,22 @@ class Users(Base):
 
     @classmethod
     def valid_id(cls, session: Any, user_id: int) -> bool:
+        """
+        Check user exist in Users by user id
+        :param session: Any
+        :param user_id: int
+        :return: bool
+        """
         return bool(session.query(cls).get(user_id))
 
     @classmethod
     def connected(cls, session: Any, user_id: int) -> None:
+        """
+        Set current datetime for user id in Users
+        :param session: Any
+        :param user_id: int
+        :return: bool
+        """
         result: Users = cls.data_by_id(session, user_id)
         if hasattr(result, 'last_request'):
             result.last_request = datetime.datetime.utcnow()
