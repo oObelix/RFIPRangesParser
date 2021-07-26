@@ -7,6 +7,11 @@ Base: Any = declarative_base()
 
 
 def erase_table(table: Type[Base]) -> None:
+    """
+    Delete and recreate table
+    :param table: Type[Base]
+    :return: None
+    """
     table.__table__.drop(engine)
     Base.metadata.create_all(engine, tables=[table.__table__])
 
