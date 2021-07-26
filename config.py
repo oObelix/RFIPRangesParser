@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Any
 import yaml
 
 
@@ -8,7 +8,7 @@ class Config:
     """
     def __init__(self, path: str = "config.yaml"):
         with open(path) as f:
-            self.config: Dict[str] = yaml.safe_load(f)
+            self.config: Dict[str, Any] = yaml.safe_load(f)
 
     @property
     def db_server_dsn(self) -> str:
