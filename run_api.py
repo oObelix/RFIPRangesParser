@@ -18,6 +18,10 @@ config = Config()
 define("port", default=config.server_port, type=int)
 
 
+class InvalidUserId(Exception):
+    pass
+
+
 class Application(tornado.web.Application):
     def __init__(self):
         handlers: List[Tuple[str, Any]] = [
@@ -47,7 +51,7 @@ class ApiLoginHandler(tornado.web.RequestHandler):
     def get(self):
         login: str = self.get_argument("login")
         password: str = self.get_argument("password")
-        if Users.user_valid(session, login, password):
+        if Users.valid(session, login, password):
             user: str = Users.user_data(session, login)
             user_id: str = user[0]
 
@@ -80,11 +84,14 @@ class ApiDataHandler(tornado.web.RequestHandler):
         try:
             token: str = self.request.headers.get("Authorization")[len(PREFIX):]
             decoded: Dict[str, int] = jwt.decode(token, SECRET, algorithms='HS256')
-        except jwt.exceptions.DecodeError:
+            if not Users.valid_id(session, decoded['id']):
+                raise InvalidUserId("User Id not found")
+        except (jwt.exceptions.DecodeError, InvalidUserId):
             self.set_status(401)
             self.write({"Error": "Auth Failed!"})
         else:
             # print(decoded, type(decoded))
+            Users.connected(session, decoded['id'])
             data: List[Any] = CollectedData.get_collected_data(session)
             total: int = len(data)
             result: Dict[Optional] = {

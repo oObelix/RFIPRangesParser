@@ -70,15 +70,13 @@ class Users(Base):
     last_request: DateTime = Column(DateTime())
 
     @classmethod
-    def user_valid(cls, session: Any, login: str, password: str) -> bool:
+    def valid(cls, session: Any, login: str, password: str) -> bool:
         return True
 
     @classmethod
-    def user_by_login(cls, session: Any, login: str) -> \
-            Tuple[int, Any, Any]:
-        return 111, datetime.datetime.utcnow(), datetime.timedelta(seconds=600)
+    def valid_id(cls, session: Any, user_id: int) -> bool:
+        return True
 
     @classmethod
-    def user_by_id(cls, session: Any, user_id: int) -> \
-            Tuple[str, Any, Any]:
-        return "Login", datetime.datetime.utcnow(), datetime.timedelta(seconds=600)
+    def connected(cls, session: Any, user_id: int) -> None:
+        pass
