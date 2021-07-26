@@ -10,8 +10,8 @@ from db_session import session
 from models import CollectedData, Users
 import jwt
 
-
-SECRET = 'my_secret_key'
+config = Config()
+JWT_SECRET = config.jwt_secret
 PREFIX = 'Bearer '
 
 config = Config()
@@ -60,7 +60,7 @@ class ApiLoginHandler(tornado.web.RequestHandler):
                 encoded: str = jwt.encode({
                     'id': user.id,
                 },
-                    SECRET,
+                    JWT_SECRET,
                     algorithm='HS256'
                 )
                 response: Dict[str, str] = {'token': encoded}

@@ -1,6 +1,7 @@
 server:
 
   port: 8888
+  JWT_SECRET: # Must be filled with random string
 
 db_server:
 

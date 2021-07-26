@@ -17,3 +17,7 @@ class Config:
     @property
     def server_port(self) -> int:
         return self.config.get('server', {}).get('port', 8888)
+
+    @property
+    def jwt_secret(self) -> int:
+        return self.config['server']['JWT_SECRET']
