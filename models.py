@@ -1,6 +1,7 @@
 from typing import List, Tuple, Any, Iterator
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, exc
 import datetime
+from sqlalchemy.util import NoneType
 from db_init import erase_table, Base
 
 
@@ -70,13 +71,31 @@ class Users(Base):
     last_request: DateTime = Column(DateTime())
 
     @classmethod
+    def data_by_login(cls, session: Any, login: str) -> Any:
+        return session.query(cls).filter_by(login=login).first()
+
+    @classmethod
+    def data_by_id(cls, session: Any, user_id: int) -> Any:
+        return session.query(cls).get(user_id)
+
+    @classmethod
     def valid(cls, session: Any, login: str, password: str) -> bool:
-        return True
+        try:
+            result: Users = session.query(cls).filter_by(login=login).first()
+            if hasattr(result, 'password'):
+                return result.password == password
+            else:
+                raise exc.SQLAlchemyError()
+        except exc.SQLAlchemyError:
+            return False
 
     @classmethod
     def valid_id(cls, session: Any, user_id: int) -> bool:
-        return True
+        return bool(session.query(cls).get(user_id))
 
     @classmethod
     def connected(cls, session: Any, user_id: int) -> None:
-        pass
+        result: Users = cls.data_by_id(session, user_id)
+        if hasattr(result, 'last_request'):
+            result.last_request = datetime.datetime.utcnow()
+        session.commit()

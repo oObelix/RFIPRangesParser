@@ -1,10 +1,10 @@
-import datetime
 from typing import List, Tuple, Any, Dict
 import uuid
 from typing import Optional, Awaitable
+from tornado import web
+from tornado.auth import AuthError
 from config import Config
 from tornado.options import define, options
-import tornado.web
 import tornado.ioloop
 from db_session import session
 from models import CollectedData, Users
@@ -18,10 +18,6 @@ config = Config()
 define("port", default=config.server_port, type=int)
 
 
-class InvalidUserId(Exception):
-    pass
-
-
 class Application(tornado.web.Application):
     def __init__(self):
         handlers: List[Tuple[str, Any]] = [
@@ -29,7 +25,7 @@ class Application(tornado.web.Application):
             ("/api/data", ApiDataHandler),
         ]
         settings: dict = dict(
-            xsrf_cookies=True,
+            xsrf_cookies=False,
             cookie_secret=uuid.uuid4().int,
             debug=True,
         )
@@ -49,23 +45,29 @@ class ApiLoginHandler(tornado.web.RequestHandler):
         self.set_header("Content-Type", "application/json")
 
     def get(self):
-        login: str = self.get_argument("login")
-        password: str = self.get_argument("password")
-        if Users.valid(session, login, password):
-            user: str = Users.user_data(session, login)
-            user_id: str = user[0]
+        pass
 
-            encoded: str = jwt.encode({
-                'id': user_id,
-            },
-                SECRET,
-                algorithm='HS256'
-            )
-            response: Dict[str, str] = {'token': encoded}
-            self.write(response)
+    def post(self):
+        try:
+            login: str = self.get_argument("login")
+            password: str = self.get_argument("password")
+        except web.MissingArgumentError as e:
+            self.write({"Error": "Missing arguments"})
         else:
-            self.set_status(401)
-            self.write({"Error": "Auth Failed!"})
+            if Users.valid(session, login, password):
+                user: Any = Users.data_by_login(session, login)
+
+                encoded: str = jwt.encode({
+                    'id': user.id,
+                },
+                    SECRET,
+                    algorithm='HS256'
+                )
+                response: Dict[str, str] = {'token': encoded}
+                self.write(response)
+            else:
+                self.set_status(401)
+                self.write({"Error": "Auth Failed!"})
 
 
 class ApiDataHandler(tornado.web.RequestHandler):
@@ -79,16 +81,22 @@ class ApiDataHandler(tornado.web.RequestHandler):
     def prepare(self):
         self.set_header("Content-Type", "application/json")
 
+    def post(self):
+        pass
+
     def get(self):
         # print(self.request.headers)
         try:
-            token: str = self.request.headers.get("Authorization")[len(PREFIX):]
-            decoded: Dict[str, int] = jwt.decode(token, SECRET, algorithms='HS256')
+            token: str = self.request.headers.get("Authorization"
+                                                  )[len(PREFIX):]
+            decoded: Dict[str, int] = jwt.decode(token, SECRET,
+                                                 algorithms='HS256')
             if not Users.valid_id(session, decoded['id']):
-                raise InvalidUserId("User Id not found")
-        except (jwt.exceptions.DecodeError, InvalidUserId):
+                raise AuthError("Invalid token or token was expired")
+        except BaseException as e:
+            # print(e)
             self.set_status(401)
-            self.write({"Error": "Auth Failed!"})
+            self.write({"Error": str(e)})
         else:
             # print(decoded, type(decoded))
             Users.connected(session, decoded['id'])
