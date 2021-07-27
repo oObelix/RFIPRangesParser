@@ -1,0 +1,145 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "RFIPRangeParser API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/login": {
+      "post": {
+        "description": "User authorization by login and password.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "login": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "login": "Slava",
+                  "password": 123456
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Get token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "description": "String token."
+                    }
+                  },
+                  "example": {
+                    "token": "efjrbfjeFDDFGDsfgdhGDHGJDFJ=="
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "description": "String token."
+                    }
+                  },
+                  "example": {
+                    "Error": "Authorization error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/data": {
+      "get": {
+        "description": "API Data.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Bearer",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get API data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "begin_ip_address": {
+                            "type": "string"
+                          },
+                          "end_ip_address": {
+                            "type": "string"
+                          },
+                          "total_count": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "total": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "description": "String token."
+                    }
+                  },
+                  "example": {
+                    "Error": "Authorization error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
