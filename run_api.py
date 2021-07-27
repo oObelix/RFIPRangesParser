@@ -55,7 +55,7 @@ class ApiLoginHandler(tornado.web.RequestHandler):
             self.write({"Error": "Missing arguments"})
         else:
             if Users.valid(session, login, password):
-                user: Any = Users.data_by_login(session, login)
+                user: Users = Users.data_by_login(session, login)
 
                 encoded: str = jwt.encode({
                     'id': user.id,
