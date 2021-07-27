@@ -5,7 +5,6 @@ import argparse
 from db_session import session
 from models import CollectedData
 
-
 # URL_PARSE = "https://lite.ip2location.com/russian-federation-ip-address-ranges"
 URL_PARSE = "https://web.archive.org/web/20210305130255/https://lite.ip2location.com/russian-federation-ip-address-ranges"
 # XPATH_BEGIN_IP_ADDRESS = ".//table[@id='ip-address']/tbody/tr/td[2]/text()"
@@ -32,10 +31,10 @@ def print_console(*lists: List[Tuple]) -> None:
 
 
 if __name__ == "__main__":
-    request: Any = requests.get(URL_PARSE,
-                                headers=REQUESTS_HEADERS,
-                                allow_redirects=True)
-    html_parse: str = request.text
+    response: Any = requests.get(URL_PARSE,
+                                 headers=REQUESTS_HEADERS,
+                                 allow_redirects=True)
+    html_parse: str = response.text
 
     parse_tree: Any = html.fromstring(html_parse)
 
