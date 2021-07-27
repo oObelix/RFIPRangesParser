@@ -5,7 +5,7 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/login": {
+    "/api/login": {
       "post": {
         "description": "User authorization by login and password.",
         "requestBody": {
@@ -71,7 +71,7 @@
         }
       }
     },
-    "/data": {
+    "/api/data": {
       "get": {
         "description": "API Data.",
         "parameters": [
