@@ -1,5 +1,6 @@
 PyYAML~=5.4.1
 SQLAlchemy~=1.4.22
+orm~=0.1.5
 tornado~=6.1
 requests~=2.26.0
 lxml~=4.6.3
