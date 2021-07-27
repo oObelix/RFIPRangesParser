@@ -6,10 +6,14 @@ from db_session import session
 from models import CollectedData
 
 
-URL_PARSE = "https://lite.ip2location.com/russian-federation-ip-address-ranges"
-XPATH_BEGIN_IP_ADDRESS = ".//table[@id='ip-address']/tbody/tr/td[2]/text()"
-XPATH_END_IP_ADDRESS = ".//table[@id='ip-address']/tbody/tr/td[4]/text()"
-XPATH_TOTAL_COUNT = ".//table[@id='ip-address']/tbody/tr/td[6]/text()"
+# URL_PARSE = "https://lite.ip2location.com/russian-federation-ip-address-ranges"
+URL_PARSE = "https://web.archive.org/web/20210305130255/https://lite.ip2location.com/russian-federation-ip-address-ranges"
+# XPATH_BEGIN_IP_ADDRESS = ".//table[@id='ip-address']/tbody/tr/td[2]/text()"
+XPATH_BEGIN_IP_ADDRESS = ".//table[@class='table table-striped table-hover']/tbody/tr/td[1]/text()"
+# XPATH_END_IP_ADDRESS = ".//table[@id='ip-address']/tbody/tr/td[4]/text()"
+XPATH_END_IP_ADDRESS = ".//table[@class='table table-striped table-hover']/tbody/tr/td[2]/text()"
+# XPATH_TOTAL_COUNT = ".//table[@id='ip-address']/tbody/tr/td[6]/text()"
+XPATH_TOTAL_COUNT = ".//table[@class='table table-striped table-hover']/tbody/tr/td[3]/text()"
 REQUESTS_HEADERS = {'Cache-Control': "no-cache",
                     'User-Agent': "Mozilla/5.0 (Macintosh; Intel "
                                   "Mac OS X 10_15_7) AppleWebKit/605.1.15 "
