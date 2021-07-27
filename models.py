@@ -3,7 +3,6 @@ from sqlalchemy import Column, Integer, String, DateTime, exc
 from sqlalchemy.ext.declarative import declarative_base
 import datetime
 
-
 Base: Any = declarative_base()
 
 
