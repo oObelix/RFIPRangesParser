@@ -1,7 +1,10 @@
 from typing import List, Tuple, Any, Iterator
 from sqlalchemy import Column, Integer, String, DateTime, exc
+from sqlalchemy.ext.declarative import declarative_base
 import datetime
-from db_init import erase_table, Base
+
+
+Base: Any = declarative_base()
 
 
 class CollectedData(Base):
@@ -39,7 +42,7 @@ class CollectedData(Base):
         :return: None
         """
 
-        erase_table(cls)
+        session.query(cls).delete()
 
         data: Iterator[Tuple[str, str, str]] = \
             zip(begin_ip_address, end_ip_address, total_count)
