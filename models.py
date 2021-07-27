@@ -72,7 +72,7 @@ class Users(Base):
     last_request: DateTime = Column(DateTime())
 
     @classmethod
-    def data_by_login(cls, session: Any, login: str) -> __name__.Users:
+    def data_by_login(cls, session: Any, login: str) -> Any:
         """
         Users instance founded by user login
         :param session: Any
@@ -82,7 +82,7 @@ class Users(Base):
         return session.query(cls).filter_by(login=login).first()
 
     @classmethod
-    def data_by_id(cls, session: Any, user_id: int) -> __name__.Users:
+    def data_by_id(cls, session: Any, user_id: int) -> Any:
         """
         Users instance founded by user id
         :param session: Any
