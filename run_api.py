@@ -10,7 +10,7 @@ from db_session import session
 from models import CollectedData, Users
 import jwt
 
-config = Config()
+config: Config = Config()
 JWT_SECRET = config.jwt_secret
 PREFIX = 'Bearer '
 
