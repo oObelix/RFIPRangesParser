@@ -14,7 +14,8 @@ Parser IP ranges from page: https://lite.ip2location.com/russian-federation-ip-a
 * deploy database : `python db_init.py`
 
 ### Fetching data
-You must run script for fetching data for correct working API: `python run_scraper.py`
+You must run script for fetching data for correct working API: `python run_scraper.py`.
+You can print data to console without adding to database using `python run_scraper.py --dry_run=True` command.
 
 ### Serve API
 * `python run_api.py`
