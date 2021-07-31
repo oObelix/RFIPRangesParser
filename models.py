@@ -1,9 +1,10 @@
-from typing import List, Tuple, Any, Iterator
-from sqlalchemy import Column, Integer, String, DateTime, exc
+from typing import List
+from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 import datetime
+from sqlalchemy.orm import Session, Query
 
-Base: Any = declarative_base()
+Base: declarative_base = declarative_base()
 
 
 class CollectedData(Base):
@@ -18,7 +19,7 @@ class CollectedData(Base):
     total_count: str = Column(String(15))
 
     @classmethod
-    def get_collected_data(cls, session: Any) -> List:
+    def get_collected_data(cls, session: Session) -> List[Query]:
         """
         Get all records in get_collected table and return as list of instances
         of CollectedData
@@ -28,13 +29,13 @@ class CollectedData(Base):
 
     @classmethod
     def update_collected_data(cls,
-                              session: Any,
+                              session: Session,
                               begin_ip_address: List[str],
                               end_ip_address: List[str],
                               total_count: List[str]) -> None:
         """
         Replace all data of update_collected with new data
-        :param session: Any
+        :param session: Session
         :param begin_ip_address: List[str]
         :param end_ip_address: List[str]
         :param total_count: List[str]
@@ -69,30 +70,30 @@ class Users(Base):
     last_request: DateTime = Column(DateTime())
 
     @classmethod
-    def data_by_login(cls, session: Any, login: str) -> Any:
+    def data_by_login(cls, session: Session, login: str) -> Query:
         """
         Users instance founded by user login
-        :param session: Any
+        :param session: Session
         :param login: str
-        :return: Any
+        :return: Query
         """
         return session.query(cls).filter_by(login=login).first()
 
     @classmethod
-    def data_by_id(cls, session: Any, user_id: int) -> Any:
+    def data_by_id(cls, session: Session, user_id: int) -> Query:
         """
         Users instance founded by user id
-        :param session: Any
+        :param session: Session
         :param user_id: str
-        :return: Any
+        :return: Query
         """
         return session.query(cls).get(user_id)
 
     @classmethod
-    def valid(cls, session: Any, login: str, password: str) -> bool:
+    def valid(cls, session: Session, login: str, password: str) -> bool:
         """
         Check user exist in Users with current login and password
-        :param session: Any
+        :param session: Session
         :param login: str
         :param password: str
         :return: bool
@@ -103,24 +104,24 @@ class Users(Base):
         return False
 
     @classmethod
-    def valid_id(cls, session: Any, user_id: int) -> bool:
+    def valid_id(cls, session: Session, user_id: int) -> bool:
         """
         Check user exist in Users by user id
-        :param session: Any
+        :param session: Session
         :param user_id: int
         :return: bool
         """
         return bool(session.query(cls).get(user_id))
 
     @classmethod
-    def connected(cls, session: Any, user_id: int) -> None:
+    def connected(cls, session: Session, user_id: int) -> None:
         """
         Set current datetime for user id in Users
-        :param session: Any
+        :param session: Session
         :param user_id: int
         :return: bool
         """
-        result: Users = cls.data_by_id(session, user_id)
+        result: Query = cls.data_by_id(session, user_id)
         if result:
             result.last_request = datetime.datetime.utcnow()
         session.commit()
