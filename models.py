@@ -43,17 +43,15 @@ class CollectedData(Base):
 
         session.query(cls).delete()
 
-        data: Iterator[Tuple[str, str, str]] = \
-            zip(begin_ip_address, end_ip_address, total_count)
-
-        session.bulk_insert_mappings(
-            cls,
-            [dict(
-                begin_ip_address=bia,
-                end_ip_address=eia,
-                total_count=tc
-            ) for bia, eia, tc in data]
-        )
+        # https://docs.sqlalchemy.org/en/14/orm/persistence_techniques.html#usage
+        session.bulk_insert_mappings(cls,
+                                     [dict(begin_ip_address=bia,
+                                           end_ip_address=eia,
+                                           total_count=tc)
+                                      for bia, eia, tc in zip(begin_ip_address,
+                                                              end_ip_address,
+                                                              total_count)]
+                                     )
         session.commit()
 
 
