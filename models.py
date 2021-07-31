@@ -122,6 +122,6 @@ class Users(Base):
         :return: bool
         """
         result: Users = cls.data_by_id(session, user_id)
-        if hasattr(result, 'last_request'):
+        if result:
             result.last_request = datetime.datetime.utcnow()
         session.commit()
