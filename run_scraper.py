@@ -2,9 +2,7 @@ from typing import List, Tuple, Any, Optional
 import requests
 from lxml import html
 import argparse
-
 from requests import Response
-
 from db_session import session
 from models import CollectedData
 
