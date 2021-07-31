@@ -98,14 +98,10 @@ class Users(Base):
         :param password: str
         :return: bool
         """
-        try:
-            result: Users = session.query(cls).filter_by(login=login).first()
-            if hasattr(result, 'password'):
-                return result.password == password
-            else:
-                raise exc.SQLAlchemyError()
-        except exc.SQLAlchemyError:
-            return False
+        result: Users = session.query(cls).filter_by(login=login).first()
+        if result:
+            return result.password == password
+        return False
 
     @classmethod
     def valid_id(cls, session: Any, user_id: int) -> bool:
