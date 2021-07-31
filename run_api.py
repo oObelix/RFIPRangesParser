@@ -21,7 +21,6 @@ define("port", default=config.server_port, type=int)
 class Application(tornado.web.Application):
     def __init__(self):
         handlers: List[Tuple[str, Any]] = [
-            # ("/swagger.json", SwaggerHandler),
             ("/api/login", ApiLoginHandler),
             ("/api/data", ApiDataHandler),
         ]
@@ -31,15 +30,6 @@ class Application(tornado.web.Application):
             debug=True,
         )
         super(Application, self).__init__(handlers, **settings)
-
-
-# class SwaggerHandler(tornado.web.RequestHandler):
-#     def prepare(self):
-#         self.set_header("Content-Type", "application/json")
-#
-#     def get(self):
-#         with open("swagger.json", "r") as f:
-#             self.write(f.read())
 
 
 class ApiLoginHandler(tornado.web.RequestHandler):
