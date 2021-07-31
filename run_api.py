@@ -1,6 +1,7 @@
 from typing import List, Tuple, Any, Dict
 import uuid
 from typing import Optional, Awaitable
+from sqlalchemy.orm import Query
 from tornado import web
 from tornado.auth import AuthError
 from config import Config
@@ -51,11 +52,11 @@ class ApiLoginHandler(tornado.web.RequestHandler):
         try:
             login: str = self.get_argument("login")
             password: str = self.get_argument("password")
-        except web.MissingArgumentError as e:
+        except web.MissingArgumentError:
             self.write({"Error": "Missing arguments"})
         else:
             if Users.valid(session, login, password):
-                user: Users = Users.data_by_login(session, login)
+                user: Query = Users.data_by_login(session, login)
 
                 encoded: str = jwt.encode({
                     'id': user.id,
@@ -100,9 +101,9 @@ class ApiDataHandler(tornado.web.RequestHandler):
         else:
             # print(decoded, type(decoded))
             Users.connected(session, decoded['id'])
-            data: List[Any] = CollectedData.get_collected_data(session)
+            data: List[Query] = CollectedData.get_collected_data(session)
             total: int = len(data)
-            result: Dict[Optional] = {
+            result: Dict[str, Any] = {
                 "data": [{"id": item.id,
                           "begin_ip_address": item.begin_ip_address,
                           "end_ip_address": item.end_ip_address,
@@ -114,6 +115,6 @@ class ApiDataHandler(tornado.web.RequestHandler):
 
 
 if __name__ == "__main__":
-    app: Any = Application()
+    app: Application = Application()
     app.listen(options.port)
     tornado.ioloop.IOLoop.current().start()
