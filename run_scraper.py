@@ -1,7 +1,10 @@
-from typing import List, Tuple, Any
+from typing import List, Tuple, Any, Optional
 import requests
 from lxml import html
 import argparse
+
+from requests import Response
+
 from db_session import session
 from models import CollectedData
 
@@ -31,20 +34,20 @@ def print_console(*lists: List[Tuple]) -> None:
 
 
 if __name__ == "__main__":
-    response: Any = requests.get(URL_PARSE,
-                                 headers=REQUESTS_HEADERS,
-                                 allow_redirects=True)
+    response: Response = requests.get(URL_PARSE,
+                                      headers=REQUESTS_HEADERS,
+                                      allow_redirects=True)
     html_parse: str = response.text
 
-    parse_tree: Any = html.fromstring(html_parse)
+    parse_tree: Optional[Any] = html.fromstring(html_parse)
 
     begin_ip_address: List = parse_tree.xpath(XPATH_BEGIN_IP_ADDRESS)
     end_ip_address: List = parse_tree.xpath(XPATH_END_IP_ADDRESS)
     total_count: List = parse_tree.xpath(XPATH_TOTAL_COUNT)
 
-    args: Any = argparse.ArgumentParser()
+    args: argparse.ArgumentParser = argparse.ArgumentParser()
     args.add_argument('--dry_run')
-    namespace: Any = args.parse_args()
+    namespace: argparse.Namespace = args.parse_args()
 
     if namespace.dry_run == 'True':
         print_console(begin_ip_address, end_ip_address, total_count)
