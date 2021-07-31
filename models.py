@@ -40,7 +40,6 @@ class CollectedData(Base):
         :param total_count: List[str]
         :return: None
         """
-
         session.query(cls).delete()
 
         # https://docs.sqlalchemy.org/en/14/orm/persistence_techniques.html#usage
